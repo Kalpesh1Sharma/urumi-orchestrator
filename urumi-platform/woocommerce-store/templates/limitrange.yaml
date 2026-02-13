@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: {{ .Values.store.name }}-limits
+  labels:
+    app: {{ .Values.store.name }}
+spec:
+  limits:
+    - default:
+        memory: 512Mi
+        cpu: 500m
+      defaultRequest:
+        memory: 256Mi
+        cpu: 200m
+      type: Container

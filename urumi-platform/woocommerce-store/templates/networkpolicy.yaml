@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.store.name }}-firewall
+  labels:
+    app: {{ .Values.store.name }}
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ .Values.store.name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  # 1. INGRESS: Allow traffic ONLY from the Ingress Controller
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 80
+  # 2. EGRESS: Allow DNS (UDP 53) and HTTP/S (for WordPress plugins/updates)
+  egress:
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+        - protocol: TCP
+          port: 80
+        - protocol: TCP
+          port: 443

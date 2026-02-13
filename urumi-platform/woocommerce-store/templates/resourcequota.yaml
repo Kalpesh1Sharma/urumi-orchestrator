@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ .Values.store.name }}-quota
+  labels:
+    app: {{ .Values.store.name }}
+spec:
+  hard:
+    requests.cpu: "1"
+    requests.memory: 1Gi
+    limits.cpu: "2"
+    limits.memory: 2Gi
+    count/pods: "5"
+    count/services: "2"
+    count/persistentvolumeclaims: "2"

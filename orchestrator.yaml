@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: urumi-orchestrator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orchestrator
+  template:
+    metadata:
+      labels:
+        app: orchestrator
+    spec:
+      serviceAccountName: orchestrator-sa
+      containers:
+      - name: server
+        # YOUR SPECIFIC IMAGE IS HERE:
+        image: us-central1-docker.pkg.dev/orchestrator-487016/urumi-repo/orchestrator:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        env:
+        # These paths match the folder structure inside your Docker image
+        - name: CHART_PATH
+          value: "/app/charts/urumi-platform/woocommerce-store"
+        - name: VALUES_PATH
+          value: "/app/values-gcp.yaml"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orchestrator-svc
+spec:
+  type: LoadBalancer  # <--- CHANGED: Exposes Dashboard to Public Internet
+  selector:
+    app: orchestrator
+  ports:
+    - port: 80
+      targetPort: 3000

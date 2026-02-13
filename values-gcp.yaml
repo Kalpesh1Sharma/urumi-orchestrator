@@ -1,0 +1,36 @@
+# --- GLOBAL SETTINGS ---
+store:
+  name: "gcp-shop"
+
+# --- WORDPRESS (The App) ---
+wordpress:
+  image: "wordpress:latest"  # <--- FIXED: Auto-updates to the newest version (Compatible with WooCommerce)
+  serviceType: "LoadBalancer"
+  
+  resources:
+    requests:
+      cpu: "25m"      # Nano size
+      memory: "128Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+# --- MYSQL (The Database) ---
+mysql:
+  image: "mysql:5.7" # Keep 5.7 (It's stable and low memory)
+  dbName: "wordpress"
+  user: "wp_user"
+  
+  resources:
+    requests:
+      cpu: "25m"      # Nano size
+      memory: "256Mi"
+    limits:
+      cpu: "500m"
+      memory: "512Mi"
+
+# --- STORAGE ---
+persistence:
+  enabled: true
+  size: "5Gi"
+  storageClass: "standard"

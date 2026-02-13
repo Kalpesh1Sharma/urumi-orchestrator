@@ -1,0 +1,38 @@
+# values-gcp.yaml
+store:
+  name: "gcp-shop"
+
+service:
+  type: LoadBalancer
+
+wordpress:
+  image: kalpesh862/urumi-woo:latest
+  pullPolicy: Always
+  username: "admin"
+  password: "password"
+  email: "admin@example.com"
+  # We are forcing these to be as small as possible
+  resources:
+    requests:
+      cpu: "50m"      # Only 5% of a CPU core
+      memory: "128Mi" # Half the previous memory
+
+mysql:
+  image: mysql:5.7
+  rootPassword: "rootpassword"
+  dbName: "wordpress"
+  user: "wp_user"
+  password: "wp_password"
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "128Mi"
+
+persistence:
+  enabled: true
+  size: 1Gi 
+  storageClass: "standard-rwo"
+
+ingress:
+  enabled: false
+  host: "temp.local"

@@ -1,0 +1,14 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.store.name }}-svc
+spec:
+  # This MUST be LoadBalancer to get an External IP on GCP
+  type: {{ .Values.service.type | default "LoadBalancer" }} 
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app: {{ .Values.store.name }}
